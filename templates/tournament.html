@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Select Game{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h1 class="text-light">🎮 Select a Game</h1>
+    <div class="coin-badge d-inline-block">
+        <i class="fas fa-coins"></i> {{ coin }} Coins
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <!-- Number Game -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h3><i class="fas fa-brain"></i> Number Game</h3>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="display-1">🔢</div>
+                    <h4>Guess the 4-digit number</h4>
+                </div>
+                
+                <div class="mb-4">
+                    <h5>How to Play:</h5>
+                    <ul>
+                        <li>Guess the 4-digit secret number</li>
+                        <li>Get clues: * = correct position, # = wrong position, _ = not in number</li>
+                        <li>Try to guess in as few attempts as possible</li>
+                        <li>Win and get bonus coins!</li>
+                    </ul>
+                </div>
+                
+                <div class="text-center">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="game_type" value="1">
+                        
+                        {% if coin >= 500 %}
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-play"></i> Play Now - 500 Coins
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-secondary btn-lg" disabled>
+                                <i class="fas fa-lock"></i> Need 500 Coins
+                            </button>
+                            <p class="text-danger mt-2">You don't have enough coins!</p>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stone Paper Scissor -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-secondary text-white">
+                <h3><i class="fas fa-hand-rock"></i> Stone Paper Scissor</h3>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="display-1">✊✋✌️</div>
+                    <h4>Classic Tournament</h4>
+                </div>
+                
+                <div class="mb-4">
+                    <h5>Coming Soon:</h5>
+                    <ul>
+                        <li>Classic rock-paper-scissors game</li>
+                        <li>Tournament style matches</li>
+                        <li>Compete against other players</li>
+                        <li>Win exciting prizes</li>
+                    </ul>
+                </div>
+                
+                <div class="text-center">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="game_type" value="2">
+                        <button type="submit" class="btn btn-secondary btn-lg" disabled>
+                            <i class="fas fa-clock"></i> Coming Soon
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{% url 'dashboard' %}" class="btn btn-outline-light">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+</div>
+{% endblock %}

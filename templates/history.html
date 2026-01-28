@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Game History{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-dark text-white">
+        <h3><i class="fas fa-history"></i> Game History</h3>
+    </div>
+    
+    <div class="card-body">
+        <!-- Game Records -->
+        <h4 class="mb-3">Recent Games</h4>
+        {% if game_records %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Attempts</th>
+                        <th>Max Score</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in game_records %}
+                    <tr>
+                        <td>{{ record.update_at|date:"M d, Y H:i" }}</td>
+                        <td>{{ record.attempt_count }}</td>
+                        <td>{{ record.max_score }}/4</td>
+                        <td>
+                            <span class="badge {% if record.status == 'Won' %}bg-success{% else %}bg-danger{% endif %}">
+                                {{ record.status }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">
+                                {% if record.max_score == 4 %}Perfect{% elif record.max_score >= 2 %}Good{% else %}Try Again{% endif %}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <h5><i class="fas fa-info-circle"></i> No games played yet</h5>
+            <p>Start playing your first game from the tournament page!</p>
+            <a href="{% url 'tournament' %}" class="btn btn-primary">
+                <i class="fas fa-gamepad"></i> Play Now
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Game History -->
+        <h4 class="mt-5 mb-3">Recent Moves</h4>
+        {% if game_history %}
+        <div class="game-history">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Clue</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for history in game_history %}
+                    <tr>
+                        <td>{{ history.time|date:"H:i:s" }}</td>
+                        <td>
+                            <span class="clue-display" style="font-size: 1.2rem;">
+                                {{ history.output }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if history.output == "****" %}
+                                <span class="badge bg-success">Win</span>
+                            {% elif "*" in history.output %}
+                                <span class="badge bg-warning">Close</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Try</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">
+            No game history available
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="card-footer">
+        <a href="{% url 'dashboard' %}" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

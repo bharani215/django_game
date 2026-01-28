@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            
+    background: url('https://static.vecteezy.com/system/resources/thumbnails/003/303/295/small/mountains-background-game-vector.jpg')
+                no-repeat center center fixed;
+    background-size: cover;
+
+
+        }
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 350px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: linear-gradient(to right, #5a6fd8, #6a4190);
+        }
+        .message {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+            background: #ffe6e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .success {
+            color: green;
+            background: #e6ffe6;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>🔐 Login to Tournament Game</h2>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            <input type="text" 
+                   name="username" 
+                   placeholder="Enter username" 
+                   required>
+            
+            <input type="password" 
+                   name="password" 
+                   placeholder="Enter password" 
+                   required>
+            
+            <button type="submit">Login</button>
+        </form>
+        
+        <div class="message">
+            <p>Don't have an account? 
+                <a href="{% url 'signup' %}" style="color: #667eea; text-decoration: none;">
+                    Sign up here
+                </a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

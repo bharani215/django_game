@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h1 class="text-light">Welcome, {{ user.username }}! 👋</h1>
+    <p class="lead text-light">Ready to test your skills?</p>
+</div>
+
+<div class="row">
+    <!-- Player Stats -->
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-header bg-info text-white">
+                <h4><i class="fas fa-chart-line"></i> Player Stats</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Coins:</span>
+                    <span class="badge bg-warning text-dark fs-6">{{ profile.coin }} 🪙</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Age:</span>
+                    <span>{{ profile.age }} years</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Member since:</span>
+                    <span>{{ user.date_joined|date:"M d, Y" }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Games Played:</span>
+                    <span>{{ recent_games|length }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="fas fa-bolt"></i> Quick Actions</h4>
+            </div>
+            <div class="card-body text-center">
+                <a href="{% url 'tournament' %}" class="btn btn-primary btn-lg w-100 mb-3">
+                    <i class="fas fa-gamepad"></i> Play Game
+                </a>
+                <a href="{% url 'history' %}" class="btn btn-secondary btn-lg w-100 mb-3">
+                    <i class="fas fa-history"></i> Game History
+                </a>
+                <a href="{% url 'profile' %}" class="btn btn-success btn-lg w-100">
+                    <i class="fas fa-user-cog"></i> My Profile
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Games -->
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-header bg-warning text-dark">
+                <h4><i class="fas fa-clock"></i> Recent Games</h4>
+            </div>
+            <div class="card-body game-history">
+                {% if recent_games %}
+                    {% for game in recent_games %}
+                        <div class="border-bottom pb-2 mb-2">
+                            <small class="text-muted">{{ game.update_at|date:"M d, H:i" }}</small>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-dark">Attempts: {{ game.attempt_count }}</span>
+                                    <span class="badge bg-dark ms-1">Score: {{ game.max_score }}/4</span>
+                                </div>
+                                <span class="badge {% if game.status == 'Won' %}bg-success{% else %}bg-danger{% endif %}">
+                                    {{ game.status }}
+                                </span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-muted">No games played yet</p>
+                    <div class="text-center">
+                        <a href="{% url 'tournament' %}" class="btn btn-sm btn-primary">
+                            Play Your First Game
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How to Play -->
+<div class="card mt-4">
+    <div class="card-header bg-dark text-white">
+        <h4><i class="fas fa-info-circle"></i> How to Play Number Game</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3 text-center mb-3">
+                <div class="display-4">🎯</div>
+                <h5>Guess the Code</h5>
+                <p class="text-muted">4-digit secret number (1-9)</p>
+            </div>
+            <div class="col-md-3 text-center mb-3">
+                <div class="display-4" style="color: green">*</div>
+                <h5>Correct Position</h5>
+                <p class="text-muted">Digit is correct and in right position</p>
+            </div>
+            <div class="col-md-3 text-center mb-3">
+                <div class="display-4" style="color: orange">#</div>
+                <h5>Digit Exists</h5>
+                <p class="text-muted">Digit is correct but wrong position</p>
+            </div>
+            <div class="col-md-3 text-center mb-3">
+                <div class="display-4" style="color: gray">_</div>
+                <h5>Not in Code</h5>
+                <p class="text-muted">Digit is not in the secret number</p>
+            </div>
+        </div>
+        <div class="alert alert-info">
+            <h6><i class="fas fa-lightbulb"></i> Tip:</h6>
+            <p>Each game costs 500 coins. Win and get 2000 coins bonus!</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

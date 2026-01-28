@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block title %}Number Game{% endblock %}
+
+{% block extra_js %}
+<script>
+    function validateInput(input) {
+        // Only allow digits and limit to 4 characters
+        input.value = input.value.replace(/[^0-9]/g, '');
+        if (input.value.length > 4) {
+            input.value = input.value.slice(0, 4);
+        }
+    }
+    
+    function autoFocusNext(current, nextId) {
+        if (current.value.length === 1) {
+            document.getElementById(nextId).focus();
+        }
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3><i class="fas fa-gamepad"></i> Number Guessing Game</h3>
+                    <div>
+                        <span class="badge bg-light text-dark me-2">
+                            Attempt: {{ attempt }}
+                        </span>
+                        <span class="badge bg-light text-dark">
+                            Max Score: {{ max_score }}/4
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body">
+                <!-- Game Instructions -->
+                <div class="alert alert-info">
+                    <h5><i class="fas fa-info-circle"></i> Instructions:</h5>
+                    <p>Guess the 4-digit secret number. Digits are from 1-9.</p>
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <span class="clue-display" style="color: green">*</span>
+                            <p>Correct position</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <span class="clue-display" style="color: orange">#</span>
+                            <p>Wrong position</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <span class="clue-display" style="color: gray">_</span>
+                            <p>Not in number</p>
+                        </div>
+                    </div>
+                </div>
+
+                {% if clue %}
+                <!-- Clue Display -->
+                <div class="alert {% if clue == '****' %}alert-success{% else %}alert-warning{% endif %} text-center">
+                    <h4>Your Guess:</h4>
+                    <div class="clue-display">{{ clue }}</div>
+                    <p class="mt-2">
+                        {% if clue == '****' %}
+                            🎉 Congratulations! You guessed it right!
+                        {% else %}
+                            Attempt #{{ attempt }}
+                        {% endif %}
+                    </p>
+                </div>
+                {% endif %}
+
+                <!-- Guess Form -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            
+                            <div class="text-center mb-3">
+                                <h5>Enter your 4-digit guess:</h5>
+                            </div>
+                            
+                            <div class="row justify-content-center mb-4">
+                                <div class="col-md-8">
+                                    <div class="input-group input-group-lg">
+                                        <input type="text" 
+                                               name="guess" 
+                                               class="form-control form-control-lg text-center" 
+                                               maxlength="4" 
+                                               pattern="\d{4}"
+                                               title="Enter exactly 4 digits (0-9)"
+                                               placeholder="Enter 4 digits"
+                                               oninput="validateInput(this)"
+                                               required
+                                               style="font-size: 2rem; letter-spacing: 1rem;">
+                                    </div>
+                                    <div class="form-text text-center">
+                                        Enter exactly 4 digits (1-9)
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-paper-plane"></i> Submit Guess
+                                </button>
+                                <a href="{% url 'tournament' %}" class="btn btn-secondary btn-lg ms-2">
+                                    <i class="fas fa-redo"></i> New Game
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Game History -->
+                {% if history %}
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5><i class="fas fa-history"></i> Guess History</h5>
+                    </div>
+                    <div class="card-body game-history">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Your Guess</th>
+                                    <th>Clue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in history reversed %}
+                                <tr>
+                                    <td>{{ item.attempt }}</td>
+                                    <td>
+                                        <span class="badge bg-dark" style="font-size: 1.2rem;">
+                                            {{ item.guess }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="clue-display" style="font-size: 1.5rem;">
+                                            {{ item.clue }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
