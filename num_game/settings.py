@@ -78,23 +78,23 @@ WSGI_APPLICATION = 'num_game.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-		'USER': 'postgres',
-        'PASSWORD': 'bharanii',
-        'HOST': 'database-1.chgksuyguaua.eu-north-1.rds.amazonaws.com',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'postgres',
+# 		'USER': 'postgres',
+#         'PASSWORD': 'bharanii',
+#         'HOST': 'database-1.chgksuyguaua.eu-north-1.rds.amazonaws.com',
+#         'PORT': '5432',
+#     }
+# }
 
 # export RDSHOST="database-1.chgksuyguaua.eu-north-1.rds.amazonaws.com" 
 # psql "host=$RDSHOST port=5432 dbname=postgres user=postgres sslmode=verify-full sslrootcert=/certs/global-bundle.pem password=<Enter_DB_Password>"
